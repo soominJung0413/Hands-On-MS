@@ -1,0 +1,6 @@
+include ':api'
+include ':util'
+include ':micoroservices:review-service'
+include ':micoroservices:recommendation-service'
+include ':micoroservices:product-service'
+include ':micoroservices:product-composite-service'

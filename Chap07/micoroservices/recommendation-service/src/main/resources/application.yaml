@@ -1,0 +1,61 @@
+server:
+  port: 7002
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
+    io.r2dbc.postgresql.QUERY: DEBUG # for queries
+    io.r2dbc.postgresql.PARAM: DEBUG # for parameters
+
+
+spring:
+  r2dbc:
+    username: postgres
+    password: tnals12@
+    url: jdbc:postgresql://localhost:5432/simple
+    host: localhost
+
+spring.cloud.stream:
+  defaultBinder: rabbit
+  default.contentType: application/json
+  bindings.input:
+    destination: recommendations # 수신할 토픽
+    group: recommendationsGroup
+
+spring.cloud.stream.bindings.input.consumer:
+  maxAttempt: 3
+  backOffInitialInterval: 500
+  backOffMaxInterval: 1000
+  backOffMultiplier: 2.0
+
+spring.cloud.stream.rabbit.bindings.input.consumer:
+  autoBindDlq: true
+  republishToDlq: true
+
+spring.cloud.stream.kafka.bindings.input.consumer:
+  enableDlq: true
+
+spring.cloud.stream.kafka.binder:
+  brokers: 127.0.0.1
+  defaultBrokerPort: 9092
+
+spring.rabbitmq:
+  host: 127.0.0.1
+  port: 5672
+  username: guest
+  password: guest
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
+---
+
+spring.profiles: docker
+
+server.port: 8080
+
+spring.r2dbc.host: postgres
+spring.rabbitmq.host: rabbitmq
+spring.cloud.stream.kafka.binder.brokers: kafka
